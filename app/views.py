@@ -21,14 +21,16 @@ def input():
 @app.route('/output')
 def output():
     #Set defaults
-    username = 'SumbLr'
-    tweet = 'stumbLr is the best app ever! It even fills in the tweet field when I leave it blank! #theater :-)'
+    username = 'StumbLr'
+    tweet = 'stumbLr is the best app ever! It even fills in the tweet field when you leave it blank! #theater :-)'
     lat = '37.763296'
     lng = '-122.421752'
     chour = datetime.now().hour
     #pull 'ID' from input field and store it
     api = tw_api.connect()
+    tweet_fail = False
     if request.args.get('username'):
+        tweet_fail = True
         try:
             username = request.args.get('username')
             query = api.statuses.user_timeline(**{'screen_name': username, 'count': 10})

@@ -93,3 +93,14 @@ body {
     color: #AAAAAA;
 }
 
+.lead p {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.starter-template a {
+    font-size: 24px;
+    color: red;
+    font-family: 'Marko One', serif;
+}
