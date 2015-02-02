@@ -21,7 +21,7 @@ def input():
 @app.route('/output')
 def output():
     #Set defaults
-    username = 'Stranger'
+    username = 'SumbLr'
     tweet = 'stumbLr is the best app ever! It even fills in the tweet field when I leave it blank! #theater :-)'
     lat = '37.763296'
     lng = '-122.421752'
@@ -29,18 +29,23 @@ def output():
     #pull 'ID' from input field and store it
     api = tw_api.connect()
     if request.args.get('username'):
-        username = request.args.get('username')
-        query = api.statuses.user_timeline(**{'screen_name': username, 'count': 10})
-        print query[0]
-        tweet = query[0]['text']
-        lng = str(query[0]['coordinates']['coordinates'][0])
-        lat = str(query[0]['coordinates']['coordinates'][1])
-        ctime = query[0]['created_at']
-        fmt = '%a %b %d %H:%M:%S +%f %Y'
-        chour = datetime.strptime(ctime,fmt).hour
-        #Assume UTC because twitter doesn't really provide corrected PDT time
-        #Also assuming person lives in PDT
-        chour = (chour - 8) % 24
+        try:
+            username = request.args.get('username')
+            query = api.statuses.user_timeline(**{'screen_name': username, 'count': 10})
+            print query[0]
+            tweet = query[0]['text']
+            lng = str(query[0]['coordinates']['coordinates'][0])
+            lat = str(query[0]['coordinates']['coordinates'][1])
+            ctime = query[0]['created_at']
+            fmt = '%a %b %d %H:%M:%S +%f %Y'
+            chour = datetime.strptime(ctime,fmt).hour
+            #Assume UTC because twitter doesn't really provide corrected PDT time
+            #Also assuming person lives in PDT
+            chour = (chour - 8) % 24
+            tweet_fail = False
+        except:
+            tweet = "Could not retrieve your tweet."
+            tweet_fail = True
 
     if request.args.get('tweet'):
         tweet = request.args.get('tweet')
@@ -48,14 +53,8 @@ def output():
     #Find likely category you're talking about
     fc = findcategory()
     category, nextvenue = fc.GetVenueYelp14time(tweet, chour)
-    #category = 'restaurants'
-    #nextvenue = 'nightlife'
-    print ' '
-    #category = 'park' #Temp Place Holder'
 
     #Now find top three venues in the next category
-    print category, nextvenue
-
     categories = ['restaurants', 'shopping', 'beauty & spas', 'nightlife',
       'fitness & instruction', 'fast food', 'hotels', 'arts & entertainment',
       'coffee & tea', 'bakeries', 'ice cream & frozen yogurt', 'jewelry',
@@ -83,9 +82,11 @@ def output():
     #maplink += "&zoom=10"
     maplink += "&key="+credentials["googleplaces"]
 
-
-    return render_template("output.html", tweet = tweet, lat = lat, lng = lng, category = category,\
-    username = username, newloc = newloc, nextvenue = nextvenue, maplink = maplink, response = response)
+    if tweet_fail == True:
+        return render_template("fail.html", username = username)
+    else:
+        return render_template("output.html", tweet = tweet, lat = lat, lng = lng, category = category,\
+        username = username, newloc = newloc, nextvenue = nextvenue, maplink = maplink, response = response)
 
 
 @app.route("/choose", methods=["POST","GET"])

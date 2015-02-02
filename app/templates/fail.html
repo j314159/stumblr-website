@@ -54,31 +54,9 @@
        <p class="lead">
         Hi there, {{username}}!
         <br>
-        You said: {{tweet}}
+        There was trouble retrieving your Twitter username.
         <br>
-        Looks like you've been talking about {{category}}.
-        <br>
-        How about checking out your local {{newloc}} scene?
-        <div class="col-sm-5">
-        {% for r in response %}
-          <p>
-            <div class="row">
-            <div class="col-sm-9 venue">
-               <a href={{r['url']}}>
-               {{r['name']}}
-               </a>
-             </div>
-            <div class="col-sm-3 rating">{{r['rating']}} Stars</div>
-            </div>
-            <div class="snippet">{{r['snippet_text']}}</div>
-            <br>
-          </p>
-        {% endfor %}
-      </div>
-      <div class="col-sm-7">
-       <iframe width="450" height="600" frameborder="0" style="border:0" 
-       src="{{ maplink }}"></iframe>
-     </div>
+        Back to <a class="venue" href="http://www.stumblr.me">stumbLr</a>!
      </div>
 
      <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
