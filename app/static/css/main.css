@@ -1,0 +1,95 @@
+body {
+    background-color: #000000;
+    color: red;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'Lato', sans-serif;
+}
+
+.nav {
+  padding-top: 25px;
+  padding-right: 90px;
+  padding-bottom: 10px;
+  padding-left: 50px;
+  background: black;
+}
+
+.nav a {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 14px 10px;
+  font-family: 'Marko One', serif;
+  /* text-transform: uppercase; */
+}
+
+.nav li {
+  display: inline;
+}
+
+.container h1 {
+  color: red;
+  font-size: 60px;  
+  font-weight: bold;
+  font-family: 'Marko One', serif;
+}
+
+.container h2 {
+  color: red;
+  font-size: 50px;  
+  font-weight: bold;
+}
+ 
+.container p {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.container .form-group {
+  font-size: 18px;
+  font-weight: bold;
+  color: #FF0000;
+}
+
+#username {
+  border-radius: 10px;
+  border: none;
+  padding-right: 50px;
+  padding-left: 10px;
+  padding-bottom: 2px;
+} 
+
+#tweet {
+  border-radius: 10px;
+  border: none;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 2px;
+} 
+
+.venue {
+  font-size: 1.3em;
+  color: red;
+}
+
+.rating {
+  font-size: 1.1em;
+  color: white;
+}
+
+.snippet {
+  color: white;
+  text-align: justify;
+}
+
+/* unvisited link */
+.venue a {
+    color: red;
+}
+
+/* visited link */
+.venue a:visited {
+    color: #AAAAAA;
+}
+

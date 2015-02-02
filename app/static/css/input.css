@@ -1,0 +1,16 @@
+body {
+    background-image:url('../img/crowded-street.jpg');  
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.container {
+  text-align: center;
+  padding:20px;
+  width:80%;
+  position:relative;
+  box-shadow: 0px 0px 10px black;
+  background: rgb(0,0,0); /* Fallback for older browsers without RGBA-support */
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 100px;
+}
