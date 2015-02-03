@@ -14,8 +14,7 @@
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../static/css/main.css" rel="stylesheet">
-    <link href="../static/css/output.css" rel="stylesheet">
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -54,15 +53,43 @@
        <p class="lead">
         Hi there, {{username}}!
         <br>
-        There was trouble retrieving your Twitter username.
+        You said: {{tweet}}
         <br>
-        <div class="small_logo">
-          Back to <a href="/">stumbLr</a>!
-        </div>
-     </div>
+        Looks like you've had {{category}} on your mind.
+        <br>
+        How about stumbLing to your local {{newloc}} scene next?
+        <div class="col-sm-5">
+        {% for r in response %}
+          <p>
+            <div class="row">
+            <div class="col-sm-9 venue">
+               <a href={{r['url']}} target="_blank">
+               {{r['name']}}
+               </a>
+             </div>
+            <div class="col-sm-3 rating">{{r['rating']}} Stars</div>
+            </div>
+            <div class="snippet">{{r['snippet_text']}}</div>
+            <br>
+          </p>
+        {% endfor %}
+      </div>
+      <div class="col-sm-7">
+      <!--<iframe width="450" height="600" frameborder="0" style="border:0" 
+       src="{{ maplink }}"></iframe>
 
-     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-     <script src="static/js/bootstrap.min.js"></script>
+            <div class="map">
+       {% include 'map.html' %} <!--to make iframe, put something like <iframe src=app/templates/map.html width=500 height=375></iframe> here    /Users/josh/stumbLr/app/templates/map.html-->
+       {% include 'map.html' %} 
+      
+
+       </div>
+       
+    <link href="../static/css/main.css" rel="stylesheet">
+    <link href="../static/css/output.css" rel="stylesheet">
+
+     </div>
+     </div>
 
     </div><!-- /.container -->
 
@@ -70,8 +97,11 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+        <script> 
+    $(function(){
+      $("#includedContent").load("map.html"); 
+    });
+    </script> 
+    <script src="../static/js/bootstrap.min.js"></script>
   </body>
 </html>

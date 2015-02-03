@@ -162,6 +162,25 @@ def search_cat(category_filter, location):
     }
     return request(API_HOST, SEARCH_PATH, url_params=url_params)
 
+def search_cat_ll(category_filter, lat, lng):
+    """Query the Search API by a search term and category.
+
+    Args:
+        term (str): The search term passed to the API.
+        location (str): The search location passed to the API.
+
+    Returns:
+        dict: The JSON response from the request.
+    """
+    cll = str(lat)+' '+str(lng)
+    url_params = {
+        'category_filter': category_filter.replace(' ', '+'),
+        'll': "{},{}".format(str(lat),str(lng)),
+        'limit': SEARCH_LIMIT
+    }
+    print url_params
+    return request(API_HOST, SEARCH_PATH, url_params=url_params)
+
 
 def top_five_venues(category, location):
     """Queries the API by the input values from the user.
@@ -171,6 +190,22 @@ def top_five_venues(category, location):
         location (str): The location of the business to query.
     """
     response = search_cat(category, location)
+
+    businesses = response.get('businesses')
+
+    if not businesses:
+        print 'No businesses for {0} in {1} found.'.format(term, location)
+
+    return businesses
+
+def top_five_venues_ll(category, lat, lng):
+    """Queries the API by the input values from the user.
+
+    Args:
+        term (str): The search term to query.
+        location (str): The location of the business to query.
+    """
+    response = search_cat_ll(category, lat, lng)
 
     businesses = response.get('businesses')
 

@@ -142,22 +142,18 @@ class findcategory():
 		  'bakeries', 'ice cream & frozen yogurt', 'jewelry',
 		  'parks', 'desserts', 'breakfast & brunch', 'drugstores']
 
-		print categories
-
 		probs = [classifier.prob_classify(self.word_indicator_lemmas(tweet)).prob(n) for n in categories]
-		print probs
+		#print probs
 		venue_index = probs.index(max(probs))
 		currentvenue = categories[venue_index]
 
 		probs_array = np.array(probs)
 		nextvenue_probs = np.dot(probs_array, markov)
 		nextvenue_probs = nextvenue_probs.tolist()
-		print 'ONE'
-		print nextvenue_probs
+		#print nextvenue_probs
 		nextvenue_index = nextvenue_probs.index(max(nextvenue_probs))
 
 		nextvenue = categories[nextvenue_index]
-		print 'TWO'
 		return (currentvenue, nextvenue)
 
 
@@ -419,4 +415,35 @@ class findcategory():
 		lemmas, pos = self.remove_pos(lemmas,pos,keep=[wn.NOUN,wn.VERB,wn.ADJ,wn.ADV,'2gram','3gram'])
 
 		return lemmas
+
+	def make_map(self, mapcenter, venues):
+
+		import os
+		import folium
+		import seaborn as sns
+		#import config
+		from itertools import islice
+
+
+		# Check if map file already exists
+		if os.path.exists('app/templates/map.html'):
+			# print 'removing file'
+			os.remove('app/templates/map.html')
+
+
+		yelp_map = folium.Map(location=mapcenter, width='100%', height=500, tiles='Stamen Toner')
+
+		for venue in islice(venues,None):
+		    lat = float(venue['location']['coordinate']['latitude'])
+		    lng = float(venue['location']['coordinate']['longitude'])
+		    label = str(venue['name'])  # don't know why str necessary here
+		    #yelp_map.simple_marker([lat,lng],popup=label)
+		    yelp_map.simple_marker(location=[lat,lng], popup_on=True, #marker_icon='eject',
+                  popup=label, marker_color='red')
+
+
+		yelp_map.create_map(path='app/templates/map.html')# % (config.paths['templates']))
+
+		return None
+
 
