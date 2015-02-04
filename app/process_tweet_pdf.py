@@ -152,13 +152,13 @@ class findcategory():
 
 		print probs
 
-		tol = 0.05
+		tol = 0.10
 		maxprob = max(probs)
 		max_indices = [i for i, prob in enumerate(probs) if maxprob - prob < tol]
 
 		#max_indices = [i for i, x in enumerate(probs) if x == max(probs)]
 		#Make sure we some idea where you are (random = 0.07142857142857138)
-		if probs[max_indices[0]] >= 0.10:
+		if probs[max_indices[0]] >= 0.20:
 			if len(max_indices) == 1:
 				venue = categories[max_indices[0]]
 				currentvenue = "Looks like you've had "+venue+" on your mind."
