@@ -143,17 +143,62 @@ class findcategory():
 		  'parks', 'desserts', 'breakfast & brunch', 'drugstores']
 
 		probs = [classifier.prob_classify(self.word_indicator_lemmas(tweet)).prob(n) for n in categories]
-		#print probs
-		venue_index = probs.index(max(probs))
-		currentvenue = categories[venue_index]
 
-		probs_array = np.array(probs)
-		nextvenue_probs = np.dot(probs_array, markov)
-		nextvenue_probs = nextvenue_probs.tolist()
-		#print nextvenue_probs
-		nextvenue_index = nextvenue_probs.index(max(nextvenue_probs))
+		#Testing different probs scenarios
+		'''probs = [0.07142857142857138, 0.07142857142857138, 0.07142857142857138, 0.07142857142857138,
+			     0.149999999999, 0.16, 0.15000000001, 0.20, 
+			     0.07142857142857138, 0.07142857142857138, 0.07142857142857138, 0.07142857142857138, 
+			     0.07142857142857138, 0.07142857142857138]'''
 
-		nextvenue = categories[nextvenue_index]
+		print probs
+
+		tol = 0.05
+		maxprob = max(probs)
+		max_indices = [i for i, prob in enumerate(probs) if maxprob - prob < tol]
+
+		#max_indices = [i for i, x in enumerate(probs) if x == max(probs)]
+		#Make sure we some idea where you are (random = 0.07142857142857138)
+		if probs[max_indices[0]] >= 0.10:
+			if len(max_indices) == 1:
+				venue = categories[max_indices[0]]
+				currentvenue = "Looks like you've had "+venue+" on your mind."
+			elif len(max_indices) == 2:
+				venue = []
+				for index in max_indices:
+					venue += categories[index]
+				currentvenue = "Looks like you've had "+categories[max_indices[0]]+" or "+categories[max_indices[1]]+" on your mind."
+			else:
+				venue = []
+				currentvenue = "Looks like you've had "
+				count = 0
+				for index in max_indices:
+					venue = categories[index]
+					count += 1
+					if count < len(max_indices):
+						currentvenue += venue+", "
+					else:
+						currentvenue += "or "+venue+" on your mind."
+
+			probs_array = np.array(probs)
+			nextvenue_probs = np.dot(probs_array, markov)
+			nextvenue_probs = nextvenue_probs.tolist()
+			#print nextvenue_probs
+			nextvenue_index = nextvenue_probs.index(max(nextvenue_probs))
+
+			#Remove possibility of staying where you're at
+			if len(max_indices) == 1 and nextvenue_index == max_indices[0]:
+				nextvenue_probs[nextvenue_index] = 0
+				nextvenue_index = nextvenue_probs.index(max(nextvenue_probs))
+
+			nextvenue = categories[nextvenue_index]
+
+		else:
+			currentvenue = "stumbLr couldn't determine what you were thinking about."
+			nextvenue = categories[np.random.randint(len(categories))]
+
+		#venue_index = probs.index(max(probs))
+		#currentvenue = categories[venue_index]
+
 		return (currentvenue, nextvenue)
 
 
@@ -416,34 +461,62 @@ class findcategory():
 
 		return lemmas
 
-	def make_map(self, mapcenter, venues):
+	def make_map(self, venues, mapcenter=False):
 
 		import os
 		import folium
 		import seaborn as sns
-		#import config
-		from itertools import islice
 
+		lats = []
+		lngs = []
+		labels = []
+		for venue in venues:
+			lats   += [venue['location']['coordinate']['latitude']]
+			lngs   += [venue['location']['coordinate']['longitude']]
+			#labels += [str(venue['name'])]
+			try:
+				labels += [str(venue['name'])]
+			except:
+				labels += ['Map could not handle string']
+
+		    #labels += unicode(raw_input(), 'utf8')
+		    #labels += str(venue['name'])
+
+		maxlen = 0.0
+		mapcenter_given = False
+		if mapcenter:
+			mapcenter_given = True
+		else:
+			mapcenter_given = False
+			#Define map center
+			mapcenter = [np.mean(lats), np.mean(lngs)]
+		
+		yelp_map = folium.Map(location=mapcenter, width='100%', height=500, tiles='OpenStreetMap', zoom_start=11)
+
+		for n in range(len(venues)):
+		    yelp_map.simple_marker(location=[lats[n],lngs[n]], popup_on=True, #marker_icon='eject',
+                  popup=labels[n], marker_color='red')
+
+		if mapcenter_given:
+			yelp_map.simple_marker(location=mapcenter, popup_on=True, marker_icon='ok-sign',
+                  popup='Tweet Location', marker_color='blue')
 
 		# Check if map file already exists
-		if os.path.exists('app/templates/map.html'):
-			# print 'removing file'
-			os.remove('app/templates/map.html')
+		if os.path.exists('app/templates/currentname.txt'):
+			with open('app/templates/currentname.txt', 'rb') as fp:
+				mapname = json.load(fp)
+		else:
+			mapname = '0'
 
+		mapname = int(mapname)
+		mapname += 1
+		mapname = str(mapname)
 
-		yelp_map = folium.Map(location=mapcenter, width='100%', height=500, tiles='Stamen Toner')
+		with open('app/templates/currentname.txt', 'wb') as fp:
+			json.dump(mapname, fp)
 
-		for venue in islice(venues,None):
-		    lat = float(venue['location']['coordinate']['latitude'])
-		    lng = float(venue['location']['coordinate']['longitude'])
-		    label = str(venue['name'])  # don't know why str necessary here
-		    #yelp_map.simple_marker([lat,lng],popup=label)
-		    yelp_map.simple_marker(location=[lat,lng], popup_on=True, #marker_icon='eject',
-                  popup=label, marker_color='red')
+		yelp_map.create_map(path='app/templates/maps/map'+mapname+'.html')# % (config.paths['templates']))
 
-
-		yelp_map.create_map(path='app/templates/map.html')# % (config.paths['templates']))
-
-		return None
+		return mapname
 
 

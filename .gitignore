@@ -1,3 +1,4 @@
 keys.json
 *.pyc
 *.pyc~
+app/templates/maps/*
