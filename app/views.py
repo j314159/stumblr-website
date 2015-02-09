@@ -72,22 +72,12 @@ def outputmap():
     fc = findcategory()
     category, nextvenue = fc.GetVenueYelp14time(tweet, chour)
 
-    #Now find top three venues in the next category
-    # categories = ['restaurants', 'shopping', 'beauty & spas', 'nightlife',
-    #   'fitness & instruction', 'fast food', 'hotels', 'arts & entertainment',
-    #   'coffee & tea', 'bakeries', 'ice cream & frozen yogurt', 'jewelry',
-    #   'parks', 'desserts', 'breakfast & brunch', 'drugstores']
-
-    # categories_forapi = ['restaurants', 'shopping', 'beautysvc', 'nightlife',
-    #   'fitness', 'hotdogs', 'hotels', 'arts',
-    #   'coffee', 'bakeries', 'icecream', 'jewelry',
-    #   'parks', 'desserts', 'breakfast_brunch', 'drugstores']
-
     categories = ['shopping', 'beauty & spas', 'nightlife',
       'fitness & instruction', 'fast food', 'hotels', 'arts & entertainment',
       'bakeries', 'ice cream & frozen yogurt', 'jewelry',
       'parks', 'desserts', 'breakfast & brunch', 'drugstores']
 
+    #Need category names that the Yelp API requires
     categories_forapi = ['shopping', 'beautysvc', 'nightlife',
       'fitness', 'hotdogs', 'hotels', 'arts',
       'bakeries', 'icecream', 'jewelry',
