@@ -392,19 +392,21 @@ class findcategory():
 			yelp_map.simple_marker(location=mapcenter, popup_on=True, marker_icon='ok-sign',
                   popup='Tweet Location', marker_color='blue')
 
-		# Check if map file already exists
-		if os.path.exists('app/templates/currentname.txt'):
-			with open('app/templates/currentname.txt', 'rb') as fp:
-				mapname = json.load(fp)
-		else:
-			mapname = '0'
+		# # Check if map file already exists
+		# if os.path.exists('app/templates/currentname.txt'):
+		# 	with open('app/templates/currentname.txt', 'rb') as fp:
+		# 		mapname = json.load(fp)
+		# else:
+		# 	mapname = '0'
 
-		mapname = int(mapname)
-		mapname += 1
-		mapname = str(mapname)
+		# mapname = int(mapname)
+		# mapname += 1
+		# mapname = str(mapname)
 
-		with open('app/templates/currentname.txt', 'wb') as fp:
-			json.dump(mapname, fp)
+		# with open('app/templates/currentname.txt', 'wb') as fp:
+		# 	json.dump(mapname, fp)
+
+		mapname = str(np.random.randint(1000000))
 
 		yelp_map.create_map(path='app/templates/maps/map'+mapname+'.html')# % (config.paths['templates']))
 
