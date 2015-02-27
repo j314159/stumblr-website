@@ -13,7 +13,7 @@ def connect():
 	
 api = connect()
 
-statuses = api.statuses.user_timeline(**{'screen_name': '@bathompso', 'count': 4})
+#statuses = api.statuses.user_timeline(**{'screen_name': '@bathompso', 'count': 4})
 #print(statuses)
 
 #min_id = min([s['id'] for s in statuses])

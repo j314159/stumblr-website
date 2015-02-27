@@ -71,7 +71,7 @@ def outputmap():
     #Find likely category you're talking about
     fc = findcategory()
     category, nextvenue = fc.GetVenueYelp14time(tweet, chour)
-
+ 
     categories = ['shopping', 'beauty & spas', 'nightlife',
       'fitness & instruction', 'fast food', 'hotels', 'arts & entertainment',
       'bakeries', 'ice cream & frozen yogurt', 'jewelry',
